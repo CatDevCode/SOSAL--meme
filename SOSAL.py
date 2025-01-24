@@ -1,5 +1,6 @@
 import tkinter as tk
 import random
+from tkinter import messagebox  # Импортируем модуль для работы с диалоговыми окнами
 
 class App:
     def __init__(self, root):
@@ -21,6 +22,9 @@ class App:
         self.message = "Ты сосал"
         self.current_index = 0
 
+        # Перехватываем событие закрытия окна
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+
     def on_yes(self):
         # Запускаем вывод текста постепенно
         self.current_index = 0
@@ -34,12 +38,19 @@ class App:
             self.current_index += 1
             # Запланировать следующий вызов через 500 мс
             self.root.after(500, self.display_message)
+        else:
+            # После завершения вывода текста ждем 7 секунд и закрываем программу
+            self.root.after(7000, self.root.destroy)
 
     def on_no(self):
         # Перемещаем кнопку "Нет" в случайное место
         x = random.randint(0, self.root.winfo_width() - 100)  # Учитываем ширину кнопки
         y = random.randint(0, self.root.winfo_height() - 50)  # Учитываем высоту кнопки
         self.button_no.place(x=x, y=y)  # Используем place для перемещения кнопки
+
+    def on_close(self):
+        # Показываем сообщение "Нельзя!" при закрытии окна
+        messagebox.showinfo("Сообщение", "Нельзя!")  # Отображаем диалоговое окно
 
 if __name__ == "__main__":
     root = tk.Tk()
